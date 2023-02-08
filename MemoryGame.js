@@ -1,17 +1,31 @@
 const cards = document.querySelectorAll(".card");
+const board = document.querySelector("#board");
+const result = document.querySelector("#result");
+const time = document.querySelector("#time");
+const flips = document.querySelector("#flips");
 
 //game variables
+
 const cardCount = 8;
 let matched = 0;
+let flipCount = 0;
 let cardOne;
 let cardTwo;
 let disableDeck = false;
+//
+var date;
+var START;
+var mytimer;
+//
 
 function flipCard({ target: clickedCard }) {
 	//destructure event to its target and name that parameter clickedCard
 
 	//check same card is not selected again and deck is available to click
 	if (cardOne !== clickedCard && !disableDeck) {
+		//display flip count
+		flipCount += 1;
+		flips.innerHTML = flipCount;
 		//clickable then click it , so flip it
 		clickedCard.classList.add("flip");
 		if (!cardOne) {
@@ -37,14 +51,7 @@ function matchCards(img1, img2) {
 	if (img1 === img2) {
 		//increse count
 		matched++;
-
-		//if all matched game is finished
-		if (matched == cardCount) {
-			//restart game in 1sec
-			setTimeout(() => {
-				return refresh();
-			}, 1000);
-		}
+		//
 		setTimeout(() => {
 			//====add class for good ui
 			cardOne.classList.add("disappear");
@@ -62,6 +69,14 @@ function matchCards(img1, img2) {
 				disableDeck = false;
 			}, 300);
 		}, 500);
+		//if all matched game is finished
+		if (matched == cardCount) {
+			window.clearInterval(mytimer);
+			setTimeout(() => {
+				result.classList.add("display");
+				board.classList.remove("display");
+			}, 1200);
+		}
 		return;
 	}
 
@@ -86,9 +101,14 @@ function matchCards(img1, img2) {
 //funtions simply suffle card in cards
 function shuffleCard() {
 	// reset
+	date = new Date();
+	START = date.getTime();
+	showTime();
 	matched = 0;
+	flipCount = 0;
 	disableDeck = false;
 	cardOne = cardTwo = "";
+	flips.innerHTML = flipCount;
 	//
 	let arr = [1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8];
 	//sort array but decision factor is random
@@ -97,22 +117,36 @@ function shuffleCard() {
 	cards.forEach((card, i) => {
 		//reset
 		card.classList.remove("flip");
-		card.style.visibility = "visible";
-		//select its image tag
-		let imgTag = card.querySelector(".back-view img");
-		//and change to our arr
-		imgTag.src = `images/img-${arr[i]}.png`;
-		//add event listerner to that card
+		setTimeout(() => {
+			card.classList.remove("disappear");
+			card.style.visibility = "visible";
+			//select its image tag
+			let imgTag = card.querySelector(".back-view img");
+			//and change to our arr
+			imgTag.src = `images/img-${arr[i]}.png`;
+			//add event listerner to that card
+		}, 300);
+
 		card.addEventListener("click", flipCard);
 	});
 }
 
 // shuffleCard();
 function refresh() {
+	result.classList.remove("display");
+	board.classList.add("display");
+	//shuffle board
 	shuffleCard();
+	//display time
+	mytimer = setInterval(showTime, 1000);
 }
 refresh();
-
+//
+function showTime() {
+	date = new Date();
+	let sec = Math.floor((date.getTime() - START) / 1000);
+	time.innerHTML = sec + "sec";
+}
 //we can use grid position to remove matched card
 //but when any row becomes empty below row move up
 //its making over complication we can simply set card visibility to hidden when matched

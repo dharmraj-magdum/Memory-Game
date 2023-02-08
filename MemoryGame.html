@@ -15,7 +15,11 @@
 
 <body>
     <div class="wrapper">
-        <div class="cards">
+        <div id="stat">
+            <h2>Time : <span id="time">12sec</span> </h2>
+            <h2>Flips : <span id="flips">12</span></h2>
+        </div>
+        <div id="board" class="cards display">
             <div class="card" data-number="1" style="--number:1">
                 <div class="view front-view">
                     <img src="images/bg2.svg" alt="icon">
@@ -144,6 +148,10 @@
                     <img src="images/img-4.png" alt="card-img">
                 </div>
             </div>
+        </div>
+        <div id="result">
+            <h1>You have won</h1>
+            <button onclick="refresh()">Restart</button>
         </div>
     </div>
 </body>
