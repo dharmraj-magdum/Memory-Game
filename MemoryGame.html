@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- // -->
     <link rel="stylesheet" href="MemoryGame.css">
+    <script src="https://kit.fontawesome.com/1826d4486b.js" crossorigin="anonymous"></script>
     <!-- // -->
     <script src="MemoryGame.js" defer></script>
     <!-- // -->
@@ -14,13 +15,30 @@
 </head>
 
 <body>
+    <h1 id="title">Memory Card Game</h1>
     <div class="wrapper">
+        <div id="start_menu">
+            <h2>Welcome to Memory Card Game</h2>
+            <div id="difficulty" name="difficulty">
+                <div id="selected_field" onclick="showDiffMenu()">
+                    <p id="selected_text">Select Difficulty</p>
+                    <i id="arrowIcon" class="fa-solid fa-angle-down "></i>
+                    <!-- <i class="fa-solid fa-angle-up"></i> -->
+                </div>
+                <ul id="list" class="close">
+                    <li class="option" data-value="easy"> Easy</li>
+                    <li class="option" data-value="normal">Normal</li>
+                    <li class="option" data-value="hard">Hard</li>
+                </ul>
+            </div>
+            <h3 id="startGame" onclick="startGame()">START</h3>
+        </div>
         <div id="stat">
             <h2>Time : <span id="time">12sec</span> </h2>
             <h2>Flips : <span id="flips">12</span></h2>
         </div>
-        <div id="board" class="cards display">
-            <div class="card" data-number="1" style="--number:1">
+        <div id="board" class="cards">
+            <!-- <div class="card" data-number="1" style="--number:1">
                 <div class="view front-view">
                     <img src="images/bg2.svg" alt="icon">
                 </div>
@@ -147,11 +165,14 @@
                 <div class="view back-view">
                     <img src="images/img-4.png" alt="card-img">
                 </div>
-            </div>
+            </div> -->
         </div>
         <div id="result">
             <h1>You have won</h1>
-            <button onclick="refresh()">Restart</button>
+            <div id="action">
+                <button onclick="showMenu()">Menu</button>
+                <button onclick="reStart()">Restart</button>
+            </div>
         </div>
     </div>
 </body>
