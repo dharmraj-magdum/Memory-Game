@@ -88,7 +88,7 @@ h1#title {
 	aspect-ratio: 1/1;
 	display: none;
 	gap: 0.8rem;
-	transition: all 0.3;
+	transition: all 0.3s linear;
 }
 #board.display {
 	display: grid;
@@ -117,10 +117,10 @@ h1#title {
 	transform-style: preserve-3d;
 }
 .card.shake {
-	animation: shake 0.35s ease-in-out;
+	animation: shake 0.3s ease-in-out;
 }
 .card.disappear {
-	animation: disappear 0.35s linear;
+	animation: disappear 0.3s linear;
 }
 @keyframes shake {
 	0%,
@@ -128,16 +128,16 @@ h1#title {
 		transform: translateX(0);
 	}
 	20% {
-		transform: translateX(-13px);
+		transform: translateX(-8%);
 	}
 	40% {
-		transform: translateX(13px);
+		transform: translateX(8%);
 	}
 	60% {
-		transform: translateX(-8px);
+		transform: translateX(-5%);
 	}
 	80% {
-		transform: translateX(8px);
+		transform: translateX(5%);
 	}
 }
 @keyframes disappear {
@@ -237,7 +237,7 @@ h1#title {
 
 /* ==============media quary========== */
 @media screen and (max-width: 700px) {
-	.cards {
+	/* .cards {
 		height: 350px;
 		width: 350px;
 	}
@@ -246,67 +246,28 @@ h1#title {
 	}
 	.card .back-view img {
 		max-width: 40px;
-	}
+	} */
 }
 
-@media screen and (max-width: 530px) {
-	.cards {
-		height: 300px;
-		width: 300px;
+@media screen and (max-width: 600px) {
+	.wrapper {
+		width: 100%;
+		padding: 10px;
 	}
-	.card .front-view img {
-		width: 15px;
-	}
-	.card .back-view img {
-		max-width: 35px;
+	#board {
+		height: auto;
+		width: 100%;
+		aspect-ratio: 1/1;
 	}
 }
-
-/* custome select menu//// */
-#difficulty {
-	width: 40%;
-	margin: 4rem auto 1rem auto;
-	text-align: left;
-	color: #000;
-}
-#difficulty #selected_field {
-	width: 100%;
-	padding: 0.5rem 1rem;
-	background-color: rgba(100, 100, 100, 0.3);
-	font-size: 1.2rem;
-	font-weight: 400;
+/* /////============== */
+.menus {
+	width: 95%;
+	height: 40%;
 	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	/* border-radius: 10px; */
-	cursor: pointer;
-}
-#difficulty #list {
-	background-color: rgba(150, 150, 150, 0.2);
-	/* border-radius: 10px; */
-	padding: 0.5rem 1rem;
-	width: 100%;
-	overflow: hidden;
-}
-#difficulty .close {
-	visibility: hidden;
-}
-#difficulty li {
-	width: 100%;
-	padding: 0.5rem;
-	list-style: none;
-	cursor: pointer;
-}
-#difficulty li:hover {
-	background-color: rgba(0, 0, 0, 0.2);
-}
-#difficulty #arrowIcon {
-	font-size: 1rem;
-	transition: all 0.3s linear;
-	transform: rotate(0deg);
-}
-#difficulty #arrowIcon.rotate {
-	transform: rotate(180deg);
+	text-align: left;
+	justify-content: space-evenly;
+	margin: 3rem auto 1rem auto;
 }
 #startGame {
 	font-size: 1.5rem;
@@ -319,4 +280,72 @@ h1#title {
 	color: #222;
 	letter-spacing: 0.1rem;
 	transform: scale(1.1);
+}
+/* //W3 custom menu */
+.custom-select {
+	position: relative;
+	height: fit-content;
+	width: 40%;
+	--clr: #555;
+	--bg: #ccc;
+}
+
+.custom-select select {
+	/*hide original SELECT element: */
+	display: none;
+}
+
+.select-selected {
+	background-color: var(--bg);
+	position: relative;
+}
+
+/* Style the arrow inside the select element: */
+.select-selected:after {
+	position: absolute;
+	content: "";
+	top: 50%;
+	right: 10px;
+	width: 0;
+	height: 0;
+	border: 6px solid transparent;
+	border-color: var(--clr) transparent transparent transparent;
+}
+
+/* Point the arrow upwards when the select box is open (active): */
+.select-selected.select-arrow-active:after {
+	border-color: transparent transparent var(--clr) transparent;
+	top: 30%;
+}
+
+/* style the items (options), including the selected item: */
+.select-items div,
+.select-selected {
+	color: var(--clr);
+	padding: 8px 30px 8px 16px;
+	border: 1px solid transparent;
+	border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+	cursor: pointer;
+}
+
+/* Style items (options): */
+.select-items {
+	position: absolute;
+	background-color: var(--bg);
+	/* top 100% means end of sel-selected(show_case)
+	 ie only display of our parent cutom menu */
+	top: 100%;
+	left: 0;
+	right: 0;
+	z-index: 99;
+}
+
+/* Hide the items when the select box is closed: */
+.select-hide {
+	display: none;
+}
+
+.select-items div:hover,
+.same-as-selected {
+	background-color: rgba(0, 0, 0, 0.2);
 }

@@ -19,17 +19,26 @@
     <div class="wrapper">
         <div id="start_menu">
             <h2>Welcome to Memory Card Game</h2>
-            <div id="difficulty" name="difficulty">
-                <div id="selected_field" onclick="showDiffMenu()">
-                    <p id="selected_text">Select Difficulty</p>
-                    <i id="arrowIcon" class="fa-solid fa-angle-down "></i>
-                    <!-- <i class="fa-solid fa-angle-up"></i> -->
+            <div class="menus">
+                <div class="custom-select">
+                    <!-- this select is always will be display none -->
+                    <!-- our new menu replace it -->
+                    <select id="theme">
+                        <option value="fruits/fruit">Select theme</option>
+                        <option value="fruits/fruit">Fruits</option>
+                        <option value="crystals/img">Crystals</option>
+                    </select>
                 </div>
-                <ul id="list" class="close">
-                    <li class="option" data-value="easy"> Easy</li>
-                    <li class="option" data-value="normal">Normal</li>
-                    <li class="option" data-value="hard">Hard</li>
-                </ul>
+                <div name="difficulty" class="custom-select">
+                    <!-- this select is always will be display none -->
+                    <!-- our new menu replace it -->
+                    <select id="difficulty">
+                        <option value="normal">Select Difficulty</option>
+                        <option value="easy">Easy</option>
+                        <option value="normal">Normal</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </div>
             </div>
             <h3 id="startGame" onclick="startGame()">START</h3>
         </div>

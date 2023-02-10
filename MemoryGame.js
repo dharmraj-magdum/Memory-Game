@@ -1,5 +1,6 @@
 const start_menu = document.querySelector("#start_menu");
-const selected_text = document.getElementById("selected_text");
+const difficulty = document.getElementById("difficulty");
+const theme = document.getElementById("theme");
 const stat = document.querySelector("#stat");
 const board = document.querySelector("#board");
 const result = document.querySelector("#result");
@@ -14,6 +15,11 @@ let flipCount = 0;
 let cardOne;
 let cardTwo;
 let disableDeck = false;
+//theme
+var THEME = "fruits/fruit";
+//menu var no reletion to project
+var anyOpen = false;
+// var theme = "crystals/img";
 //
 var date;
 var START;
@@ -33,6 +39,7 @@ function generateBoard() {
 			break;
 		default:
 			cardPairCount = 8;
+			// console.log("bydefalut");
 			break;
 	}
 	board.innerHTML = "";
@@ -43,7 +50,7 @@ function generateBoard() {
 		            <img src="images/bg2.svg" alt="icon">
 					</div>
 					<div class="view back-view">
-		            <img src="images/quetionmark.svg" alt="icon">
+		            <img src="images/quetionmark.png" alt="icon">
 		        </div>
 		    </div>`;
 	}
@@ -99,7 +106,7 @@ function matchCards(img1, img2) {
 				cardOne = cardTwo = "";
 				disableDeck = false;
 			}, 300);
-		}, 500);
+		}, 800);
 		//if all matched game is finished
 		if (matched == cardPairCount) {
 			window.clearInterval(mytimer);
@@ -194,10 +201,10 @@ function shuffleCard() {
 			//select its image tag
 			setTimeout(() => {
 				let imgTag = card.querySelector(".back-view img");
-				imgTag.src = `images/img-${arr[i]}.png`;
+				imgTag.src = `images/${THEME}-${arr[i]}.png`;
 			}, 400);
 			//and change to our arr
-		}, 300);
+		}, 400);
 		//add event listerner to that card
 		card.addEventListener("click", flipCard);
 	});
@@ -213,8 +220,10 @@ function showMenu() {
 }
 showMenu();
 function startGame() {
-	//generateBoard();
-	//start game
+	DIFFICULTY = difficulty[difficulty.selectedIndex].value;
+	console.log(DIFFICULTY);
+	THEME = theme[theme.selectedIndex].value;
+	console.log(THEME);
 	reStart();
 }
 function reStart() {
@@ -238,29 +247,152 @@ function showTime() {
 	time.innerHTML = sec + "sec";
 }
 
-///for-----custom select menu
-const selected_field = document.getElementById("selected_field");
-const arrowIcon = document.getElementById("arrowIcon");
-const list = document.getElementById("list");
-const options = document.getElementsByClassName("option");
-for (option of options) {
-	option.onclick = function () {
-		selected_text.innerText = this.textContent;
-		DIFFICULTY = this.dataset.value;
-		// console.log(DIFFICULTY);
-		list.classList.toggle("close");
-		arrowIcon.classList.toggle("rotate");
-	};
+/////////////////////////////////////
+//W3 custom menu , this becomes more complicated as every custom menu configured All in one time
+var i, j, l, a, b, c;
+/* Look for any elements with the class "custom-select": */
+var menu_list = document.getElementsByClassName("custom-select");
+var numberOfmenus = menu_list.length;
+//do for each menu in our HTML
+for (i = 0; i < numberOfmenus; i++) {
+	var original_select = menu_list[i].getElementsByTagName("select")[0];
+	var numberOfItems = original_select.length;
+	// For each menu, create a new DIV that will act as the selected item
+	// (to show what is currently selected)
+	var show_selected = document.createElement("DIV");
+	show_selected.setAttribute("class", "select-selected");
+	//now put selected value in that div
+	//by default it first value in options ie 0 (selectedIndex) in option
+	show_selected.innerHTML =
+		original_select.options[original_select.selectedIndex].innerHTML;
+	//now put that in menu
+	menu_list[i].appendChild(show_selected);
+	/* For each menu (options), create a new DIV that will contain the option list: */
+	//container inside menu who holds all items
+	var optionsContainer = document.createElement("DIV");
+	optionsContainer.setAttribute("class", "select-items select-hide");
+	// For each option in the ORIGINAL select element,
+	for (j = 1; j < numberOfItems; j++) {
+		//	create a new DIV that will act as an option item: */
+		var optionDiv = document.createElement("DIV");
+		//put text in our new Duplicate option from ORIGINAL option
+		optionDiv.innerHTML = original_select.options[j].innerHTML;
+		//add listener fr click on our new option
+		optionDiv.addEventListener("click", funForOpt);
+		//now after comleting prep of option , add it to container
+		optionsContainer.appendChild(optionDiv);
+	}
+	//now optionsContainer is filled with its options
+	//simple put it in menu
+	menu_list[i].appendChild(optionsContainer);
+
+	//attach listener to showcase text
+	//which onclick open menu and close
+	show_selected.addEventListener("click", function (e) {
+		//just for outside click ease to repeted closin on anywhere clicking
+		anyOpen = true;
+		// When the select box is clicked, close any other select boxes,
+		//and open/close the current select box
+		e.stopPropagation();
+		//close menus which might be open
+		closeAllSelect(this);
+		//toggle hide class to open or close menu
+		//it actually hide optionContainer and that we want
+		this.nextSibling.classList.toggle("select-hide");
+		//just for ui arrow
+		this.classList.toggle("select-arrow-active");
+	});
 }
-selected_field.onclick = function () {
-	list.classList.toggle("close");
-	arrowIcon.classList.toggle("rotate");
-};
-//we can use grid position to remove matched card
-//but when any row becomes empty below row move up
-//its making over complication we can simply set card visibility to hidden when matched
-// let startCol = (i % 4) + 1;
-// startCol = startCol == 0 ? 4 : startCol;
-// let startRow = Math.floor(i / 4);
-// card.style.gridColumn = `${startCol}/span 1`;
-// card.style.gridRow = `${startRow}/span 1`;
+function funForOpt() {
+	//When an item is clicked, update the ORIGINAL select box,
+	//  and the selected item: */
+	var original_select =
+		this.parentNode.parentNode.getElementsByTagName("select")[0];
+	var totalItems = original_select.length;
+	//parent is optioncontainer its prevsibling is show_selected(showcase) div
+	var show_selected = this.parentNode.previousSibling;
+	for (let i = 0; i < totalItems; i++) {
+		//for each ORIGINAL option
+		//if innerHtml matched ,set that ori-option as selected
+		if (original_select.options[i].innerHTML == this.innerHTML) {
+			//set selected as mathed index
+			original_select.selectedIndex = i;
+			//simply put showcase with that text
+			show_selected.innerHTML = this.innerHTML;
+			//this is reset remove "same-as-selected" on all other our duplicate optoinsDivs
+			//W3 do this -->
+			// y = this.parentNode.getElementsByClassName("same-as-selected");
+			// yl = y.length;
+			// for (k = 0; k < yl; k++) {
+			// 	y[k].removeAttribute("class");
+			// }
+			//my-->
+			var prevSelectedDiv =
+				this.parentNode.getElementsByClassName("same-as-selected")[0];
+			if (prevSelectedDiv) {
+				// console.log(prevSelectedDiv);
+				prevSelectedDiv.removeAttribute("class");
+			}
+			//now only put classname it on current optionDiv
+			this.setAttribute("class", "same-as-selected");
+			//as matched with ori-option process done break;
+			break;
+		}
+	}
+	//memic as selcted but actually , we mannually click on show_selected
+	//which open/close on toggle (here it closes)
+	show_selected.click();
+}
+function closeAllSelect(elmnt) {
+	//A function that will close all select boxes in the document,
+	//except the current select box.
+	var activeIdx = [];
+	//get all containes
+	var N_optionsContainer = document.getElementsByClassName("select-items");
+	var containerCount = N_optionsContainer.length;
+	var N_show_case = document.getElementsByClassName("select-selected");
+	//get all show_case divs
+	var showCaseCount = N_show_case.length;
+	for (let i = 0; i < showCaseCount; i++) {
+		if (elmnt == N_show_case[i]) {
+			//match to this push in array
+			// console.log("matched-", i);
+			//this is added only once but its imp
+			activeIdx.push(i);
+		} else {
+			//remove for arrow ui
+			N_show_case[i].classList.remove("select-arrow-active");
+		}
+	}
+	//here hide all optionscontainers(menu)
+	//this is only helpfull if you click outside
+	for (let i = 0; i < containerCount; i++) {
+		//hide all other
+		//check the curr ele(ie current active clicked container)
+		//here diff approch first occur is zero which is false
+		//but all other values gives -1 which is true
+		///so add hide to all expect curr
+		if (activeIdx.indexOf(i)) {
+			// console.log("activeIdx.indexOf(i)", activeIdx.indexOf(i), "i", i);
+			N_optionsContainer[i].classList.add("select-hide");
+		}
+	}
+	//the cur ele is hiddded later in its onclick function
+	//this becuase outside click close feature and click again on show_case
+	//if we directly set all hide on for outside
+	//then if click open ele(show_case) again to close it
+	//closeAll add hide and ,toggle inside clickfun() get disturbed
+	///as add hide here then toggle there back to remove hide
+	//causing always open ele
+	//IMM-> in-short all just to click back on show_case to close menu
+}
+
+/* If the user clicks anywhere outside the select box,
+then close all select boxes: */
+document.addEventListener("click", () => {
+	// console.log(anyOpen);
+	if (anyOpen == true) {
+		anyOpen = false;
+		closeAllSelect();
+	}
+});
