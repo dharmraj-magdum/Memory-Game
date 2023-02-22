@@ -35,7 +35,7 @@ function generateBoard() {
 			cardPairCount = 8;
 			break;
 		case "hard":
-			cardPairCount = 16;
+			cardPairCount = 15;
 			break;
 		default:
 			cardPairCount = 8;
@@ -43,7 +43,9 @@ function generateBoard() {
 			break;
 	}
 	board.innerHTML = "";
-	board.style = `--colm:${cardPairCount > 2 ? cardPairCount / 2 : 2}`;
+	let gridcolm = 4;
+	gridcolm = cardPairCount == 2 ? 2 : cardPairCount == 8 ? 4 : 5;
+	board.style = `--colm:${gridcolm}`;
 	for (let i = 0; i < cardPairCount * 2; i++) {
 		board.innerHTML += ` <div class="card flip disappear" data-number="1" style="--number:1">
 		        <div class="view front-view">
@@ -163,7 +165,22 @@ function shuffleCard() {
 			idx2 = Math.floor(Math.random() * 9);
 		}
 		arr = [idx1, idx1, idx2, idx2];
-	} else if (cardPairCount === 8) {
+	} else if (cardPairCount === 15) {
+		let imageRepetition = 2;
+		//saying one pair of image should now occure 2 times
+		let totalPicked = 0;
+		for (let index = 1; index <= 8; index++) {
+			for (
+				let rep = 0;
+				rep < imageRepetition * 2 && totalPicked < cardPairCount * 2;
+				rep++
+			) {
+				totalPicked++;
+				arr.push(index);
+			}
+		}
+	} else {
+		cardPairCount = 8;
 		let imageRepetition = cardPairCount / 8;
 		// console.log(imageRepetition);
 		//saying one pair of image should now occure 1 times
@@ -172,16 +189,7 @@ function shuffleCard() {
 				arr.push(index);
 			}
 		}
-	} else if (cardPairCount === 16) {
-		let imageRepetition = cardPairCount / 8;
-		//saying one pair of image should now occure 2 times
-		for (let index = 1; index <= 8; index++) {
-			for (let rep = 0; rep < imageRepetition * 2; rep++) {
-				arr.push(index);
-			}
-		}
 	}
-
 	//sort array but decision factor is random
 	//so arr is get randomize
 	arr.sort(() => (Math.random() > 0.5 ? 1 : -1));

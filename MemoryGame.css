@@ -212,7 +212,7 @@ h1#title {
 	text-align: center;
 }
 #result h1 {
-	color: #35ff85;
+	color: #32cc53;
 	font-size: 3rem;
 	/* margin: 3rem auto; */
 }
@@ -236,20 +236,16 @@ h1#title {
 }
 
 /* ==============media quary========== */
-@media screen and (max-width: 700px) {
-	/* .cards {
-		height: 350px;
-		width: 350px;
+@media screen and (max-width: 480px) {
+	body {
+		align-items: center;
+		justify-content: start;
 	}
-	.card .front-view img {
-		width: 17px;
+	h1#title {
+		margin: 1rem auto;
+		font-size: 1.5rem;
+		padding: 0.3rem 0.6rem;
 	}
-	.card .back-view img {
-		max-width: 40px;
-	} */
-}
-
-@media screen and (max-width: 600px) {
 	.wrapper {
 		width: 100%;
 		padding: 10px;
@@ -259,8 +255,30 @@ h1#title {
 		width: 100%;
 		aspect-ratio: 1/1;
 	}
+	.cards {
+		/* width: 100%; */
+		max-height: calc(100% / 1 - 0.1rem);
+		height: calc(100% / 1 - 0.1rem);
+		aspect-ratio: 1/1;
+		display: none;
+		gap: 0.8rem;
+		transition: all 0.3s linear;
+	}
+	#board.display {
+		display: grid;
+		grid-template-columns: repeat(var(--colm), 1fr);
+		grid-template-rows: auto;
+		align-content: center;
+		align-items: start;
+		justify-items: start;
+		justify-content: center;
+	}
+	#result h1 {
+		font-size: 2rem;
+	}
 }
-/* /////============== */
+
+/* /////==============custom menu*/
 .menus {
 	width: 95%;
 	height: 40%;
